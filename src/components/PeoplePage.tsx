@@ -26,8 +26,8 @@ export const PeoplePage = () => {
       result = result.filter(
         person =>
           person.name.toLowerCase().includes(normalizeQuery) ||
-          person.motherName?.toLowerCase().includes(normalizeQuery) ||
-          person.fatherName?.toLowerCase().includes(normalizeQuery),
+          (person.motherName || '').toLowerCase().includes(normalizeQuery) ||
+          (person.fatherName || '').toLowerCase().includes(normalizeQuery),
       );
     }
 
@@ -45,26 +45,19 @@ export const PeoplePage = () => {
 
     if (sort) {
       result.sort((a, b) => {
-        let aValue = a[sort as keyof Person];
-        let bValue = b[sort as keyof Person];
+        const aValue = a[sort as keyof Person];
+        const bValue = b[sort as keyof Person];
 
-        if (aValue === null || aValue === undefined) {
-          aValue = '';
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return order === 'desc' ? bValue - aValue : aValue - bValue;
         }
 
-        if (bValue === null || bValue === undefined) {
-          bValue = '';
-        }
+        const aString = String(aValue ?? '').toLowerCase();
+        const bString = String(bValue ?? '').toLowerCase();
 
-        if (aValue < bValue) {
-          return order === 'desc' ? 1 : -1;
-        }
+        const comparison = aString.localeCompare(bString);
 
-        if (aValue > bValue) {
-          return order === 'desc' ? -1 : 1;
-        }
-
-        return 0;
+        return order === 'desc' ? -comparison : comparison;
       });
     }
 

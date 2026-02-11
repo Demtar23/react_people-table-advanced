@@ -14,7 +14,15 @@ export const AppRouter = () => {
           <div className="container">
             <Routes>
               <Route path="/" element={<HomePage />}></Route>
-              <Route path="/home" element={<Navigate to="/" replace />}></Route>
+              <Route
+                path="/home"
+                element={
+                  <Navigate
+                    to={{ pathname: '/', search: location.search }}
+                    replace
+                  />
+                }
+              ></Route>
               <Route
                 path="/people/:personSlug?"
                 element={<PeoplePage />}

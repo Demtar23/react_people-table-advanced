@@ -19,19 +19,24 @@ export const Navbar = () => {
               'has-background-grey-lighter': location.pathname === '/',
             })}
             to="/"
+            aria-current={location.pathname === '/' ? 'page' : undefined}
           >
             Home
           </Link>
 
           <Link
-            aria-current="page"
+            aria-current={
+              location.pathname.startsWith('/people') ? 'page' : undefined
+            }
             className={cn('navbar-item', {
               'has-background-grey-lighter':
                 location.pathname.startsWith('/people'),
             })}
             to={{
               pathname: '/people',
-              search: searchParams.toString(),
+              search: searchParams.toString()
+                ? `?${searchParams.toString()}`
+                : '',
             }}
           >
             People
