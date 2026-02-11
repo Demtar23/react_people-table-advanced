@@ -25,7 +25,7 @@ export const PeoplePage = () => {
 
       result = result.filter(
         person =>
-          person.name.toLowerCase().includes(normalizeQuery) ||
+          (person.name || '').toLowerCase().includes(normalizeQuery) ||
           (person.motherName || '').toLowerCase().includes(normalizeQuery) ||
           (person.fatherName || '').toLowerCase().includes(normalizeQuery),
       );
@@ -37,6 +37,10 @@ export const PeoplePage = () => {
 
     if (centuries.length > 0) {
       result = result.filter(person => {
+        if (typeof person.born !== 'number' || !Number.isFinite(person.born)) {
+          return false;
+        }
+
         const century = Math.ceil(person.born / 100);
 
         return centuries.includes(String(century));
